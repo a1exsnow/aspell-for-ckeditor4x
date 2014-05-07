@@ -3,8 +3,10 @@ header('Content-type: text/html; charset=utf-8');
 
 // The following variables values must reflect your installation needs.
 
-//$aspell_prog	= '"C:\Program Files\Aspell\bin\aspell.exe"';	// by FredCK (for Windows)
-$aspell_prog	= 'aspell';										// by FredCK (for Linux)
+$aspell_prog = find_apell();
+if (!$aspell_prog) {
+    throw new Exception('aspell not found!');
+}
 
 $lang			= 'en_US';
 $aspell_opts	= "-a --lang=$lang --encoding=utf-8 -H --rem-sgml-check=alt";		// by FredCK
@@ -17,6 +19,27 @@ $word_win_src	= '../wordWindow.js';							// by FredCK
 
 $textinputs		= $_POST['textinputs']; # array
 $input_separator = "A";
+
+# Finds the aspell executable
+function find_apell() {
+    $path = null;
+    $tries = array(
+        'aspell',                // In path
+        '/usr/local/bin/spell',  // Linux user install
+        '/usr/bin/aspell',       // Linux system install
+        '/opt/local/bin/aspell', // Mac (installed using Macports)
+        '"C:\Program Files\Aspell\bin\aspell.exe"' // Windows
+    );
+
+    foreach ($tries as $try) {
+        if (shell_exec($try)) {
+            $path = $try;
+            break;
+        }
+    }
+
+    return $path;
+}
 
 # set the JavaScript variable to the submitted text.
 # textinputs is an array, each element corresponding to the (url-encoded)
