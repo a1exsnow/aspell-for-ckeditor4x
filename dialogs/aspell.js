@@ -29,10 +29,18 @@ CKEDITOR.dialog.add('aspell', function( editor )
 				// Call from window.setInteval expected at once.
 				if (typeof interval != 'undefined')
 					window.clearInterval(interval);
-				
+
+				var spellCheckScript = editor.plugins.aspell.path+'spellerpages/server-scripts/spellchecker.php';
+				if (typeof editor.config.aspell_scriptLanguage !== 'undefined') {
+					spellCheckScript = editor.plugins.aspell.path
+						+ 'spellerpages/server-scripts/spellchecker.'+editor.config.aspell_scriptLanguage;
+				} else if (typeof editor.config.aspell_scriptPath !== 'undefined') {
+					spellCheckScript = editor.config.aspell_scriptPath;
+				}
+
 				// Create spellcheck object, set options/attributes
 				var oSpeller = new spellChecker(document.getElementById(textareaId));
-				oSpeller.spellCheckScript = editor.plugins.aspell.path+'spellerpages/server-scripts/spellchecker.cfm';
+				oSpeller.spellCheckScript = spellCheckScript;
 				oSpeller.OnFinished = function (numChanges) { oSpeller_OnFinished(dialog, numChanges) };
 				oSpeller.popUpUrl = editor.plugins.aspell.path+'spellerpages/spellchecker.html';
 				oSpeller.popUpName = iframeId;
