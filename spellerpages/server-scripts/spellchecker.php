@@ -129,6 +129,8 @@ function print_checker_results() {
 
 			// Strip all tags for the text. (by FredCK - #339 / #681)
 			$text = preg_replace( "/<[^>]+>/", " ", $text ) ;
+			// Convert all HTML encoded characters in aspell readable form
+			$text = html_entity_decode($text);
 
 			$lines = explode( "\n", $text );
 			fwrite ( $fh, "%\n" ); # exit terse mode
