@@ -30,7 +30,7 @@ if (!isset($options['aspell_opts'])) {
 if (empty($_POST['textinputs'])) {
     throw new Exception('textinputs not found in post!');
 }
-if ($aspell_prog === null) {
+if ($variables['aspell_prog'] === null) {
     throw new Exception('aspell not found!');
 }
 
@@ -190,7 +190,7 @@ function print_checker_results() {
 	unlink( $tempfile );
 }
 
-
+header('Content-type: text/html; charset=utf-8');
 ?>
 <html>
 <head>
@@ -208,7 +208,6 @@ print_textinputs_var();
 
 print_checker_results();
 
-header('Content-type: text/html; charset=utf-8');
 ?>
 
 var wordWindowObj = new wordWindow();
